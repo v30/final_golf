@@ -15,7 +15,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void newRound(View view) {
-        Intent intent = new Intent(this, AcrivityRoundDetails.class);
+        Intent intent = new Intent(this, ActivityShot.class);
         startActivity(intent);
     }
 }

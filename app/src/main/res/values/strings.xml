@@ -4,4 +4,83 @@
     <string name="course_name">Course Name:</string>
     <string name="course_par">Course Par:</string>
     <string name="your_handicap">Your Handicap:</string>
+    <string name="shot_type">Shot Type:</string>
+    <string name="club_hit">Club Hit</string>
+    <string name="ball_flight">Ball Flight</string>
+    <string name="outcome">Outcome</string>
+    <string name="target_distance">Distance To Hole:</string>
+    <string name="end_shot">End Shot</string>
+
+    <string-array name="shot_type">
+        <item>Drive</item>
+        <item>Approach</item>
+        <item>Layup</item>
+        <item>Pitch</item>
+        <item>Chip</item>
+        <item>Putt</item>
+    </string-array>
+
+    <string-array name="club_hit">
+        <item>Driver</item>
+        <item>3W</item>
+        <item>5W</item>
+        <item>3H</item>
+        <item>4H</item>
+        <item>5H</item>
+        <item>2I</item>
+        <item>3I</item>
+        <item>4I</item>
+        <item>5I</item>
+        <item>6I</item>
+        <item>7I</item>
+        <item>8I</item>
+        <item>9I</item>
+        <item>PW</item>
+        <item>SW</item>
+        <item>GW</item>
+        <item>LW</item>
+    </string-array>
+
+    <string-array name="club_hit_putter">
+        <item>Putter</item>
+    </string-array>
+
+    <string-array name="ball_flight">
+        <item>HD</item>
+        <item>H</item>
+        <item>HF</item>
+        <item>D</item>
+        <item>S</item>
+        <item>F</item>
+        <item>LD</item>
+        <item>L</item>
+        <item>LF</item>
+        <item>DF</item>
+    </string-array>
+
+    <string-array name="putt_roll">
+        <item>3ft</item>
+        <item>6ft</item>
+        <item>9ft</item>
+        <item>12ft</item>
+        <item>15ft</item>
+        <item>18ft</item>
+        <item>Over 20ft</item>
+    </string-array>
+
+    <string-array name="outcome">
+        <item>Fairway</item>
+        <item>Green</item>
+        <item>Bunker</item>
+        <item>Hazard</item>
+        <item>Fringe</item>
+        <item>Rough</item>
+        <item>Hole</item>
+        <item>Duff</item>
+    </string-array>
+
+    <string-array name="putt_outcome">
+        <item>Hole</item>
+        <item>Miss</item>
+    </string-array>
 </resources>
