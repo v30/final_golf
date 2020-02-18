@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">FinalGolf</string>
+    <string name="new_round">New Round</string>
+    <string name="course_name">Course Name:</string>
+    <string name="course_par">Course Par:</string>
+    <string name="your_handicap">Your Handicap:</string>
 </resources>
