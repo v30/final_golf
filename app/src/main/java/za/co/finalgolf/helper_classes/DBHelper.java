@@ -2,6 +2,7 @@ package za.co.finalgolf.helper_classes;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -105,7 +106,8 @@ public class DBHelper extends SQLiteOpenHelper {
         query.append("hole_stroke INT NOT NULL, ");
         query.append("medal_score INT NOT NULL, ");
         query.append("stableford_score INT NOT NULL, ");
-        query.append("true_score INT NOT NULL");
+        query.append("true_score INT NOT NULL, ");
+        query.append("gir INT NOT NULL");
         query.append(")");
 
         db.execSQL(query.toString());
@@ -154,7 +156,7 @@ public class DBHelper extends SQLiteOpenHelper {
         return db.insert(ROUNDS, null, values);
     }
 
-    public long insertHole(SQLiteDatabase db, String holeId, String roundId, int holeNumber, int holePar, int holeStroke, int holeMedal, int holeStable, int holeTrue) {
+    public long insertHole(SQLiteDatabase db, String holeId, String roundId, int holeNumber, int holePar, int holeStroke, int holeMedal, int holeStable, int holeTrue, boolean gir) {
         ContentValues values = new ContentValues();
         values.put(HOLE_ID, holeId);
         values.put(ROUND_ID, roundId);
@@ -164,6 +166,7 @@ public class DBHelper extends SQLiteOpenHelper {
         values.put(HOLE_MEDAL, holeMedal);
         values.put(HOLE_STABLE, holeStable);
         values.put(HOLE_TRUE, holeTrue);
+        values.put(GIR, gir);
 
         return db.insert(HOLES, null, values);
     }
@@ -186,5 +189,38 @@ public class DBHelper extends SQLiteOpenHelper {
             String deleteString = "DROP TABLE IF EXISTS " + tableName;
             db.execSQL(deleteString);
         }
+    }
+
+    public int getCountFromDatabase(SQLiteDatabase db, String roundId, String shot_type, String outcome) {
+        if (outcome == null) {
+            return (int) DatabaseUtils.queryNumEntries(db, SHOTS, "round_id = ? AND " + SHOT_TYPE + " LIKE ?", new String[]{roundId, shot_type});
+        }
+        else
+            return (int) DatabaseUtils.queryNumEntries(db, SHOTS, "round_id = ? AND (" + SHOT_TYPE + " LIKE ? AND "+OUTCOME+" LIKE ?)", new String[]{roundId, shot_type, outcome});
+    }
+
+    public int getGirCountFromDatabase(SQLiteDatabase db, String roundId) {
+        return (int)DatabaseUtils.queryNumEntries(db, HOLES, "round_id = ? AND "+GIR+"=1", new String[]{roundId});
+    }
+
+    public int getMedalScore(SQLiteDatabase db, String roundId) {
+        return (int)DatabaseUtils.queryNumEntries(db, SHOTS, "round_id = ?", new String[]{roundId});
+    }
+
+    public int getStableFordScore(SQLiteDatabase db, String roundId) {
+        int count = -1;
+        StringBuilder query = new StringBuilder();
+        query.append("SELECT SUM (stableford_score) FROM ");
+        query.append(HOLES);
+        query.append(" WHERE ");
+        query.append(ROUND_ID);
+        query.append(" = ?");
+
+        Cursor c = db.rawQuery(query.toString(), new String[]{roundId});
+        if(c.moveToFirst())
+            count = c.getInt(0);
+
+        c.close();
+        return count;
     }
 }

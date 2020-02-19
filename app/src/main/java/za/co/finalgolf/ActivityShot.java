@@ -14,6 +14,8 @@ import android.widget.Spinner;
 import za.co.finalgolf.helper_classes.DBHelper;
 import za.co.finalgolf.helper_classes.Util;
 
+import static za.co.finalgolf.helper_classes.JavaConstants.COURSE_NAME;
+import static za.co.finalgolf.helper_classes.JavaConstants.COURSE_PAR;
 import static za.co.finalgolf.helper_classes.JavaConstants.HOLE_ID;
 import static za.co.finalgolf.helper_classes.JavaConstants.HOLE_NUMBER;
 import static za.co.finalgolf.helper_classes.JavaConstants.HOLE_PAR;
@@ -26,8 +28,8 @@ public class ActivityShot extends AppCompatActivity implements AdapterView.OnIte
     Spinner spnShotType, spnClubHit, spnBallFlight, spnOutcome;
     EditText editTargetDistance;
     boolean isPutt = false;
-    String holeId, roundId;
-    int holeNumber, par, stroke;
+    String holeId, roundId, courseName;
+    int holeNumber, par, stroke, coursePar;
     String shotType;
     String clubHit;
     String ballFlight;
@@ -48,6 +50,8 @@ public class ActivityShot extends AppCompatActivity implements AdapterView.OnIte
         holeNumber = holeIntent.getIntExtra(HOLE_NUMBER, 0);
         par = holeIntent.getIntExtra(HOLE_PAR, 0);
         stroke = holeIntent.getIntExtra(HOLE_STROKE, 0);
+        courseName = holeIntent.getStringExtra(COURSE_NAME);
+        coursePar = holeIntent.getIntExtra(COURSE_PAR, 0);
         initShotTypeSpinner();
     }
 
@@ -139,6 +143,9 @@ public class ActivityShot extends AppCompatActivity implements AdapterView.OnIte
         dbHelper.insertShot(db, shotId, holeId, shotType, targetDistance, clubHit, ballFlight, outcome);
 
         if (outcome.equalsIgnoreCase("hole")) {
+            ActivityHole.editPar.setText("");
+            ActivityHole.editStroke.setText("");
+            ActivityHole.editPar.requestFocus();
             saveHoleToDatabase();
             finish();
         }
@@ -149,6 +156,22 @@ public class ActivityShot extends AppCompatActivity implements AdapterView.OnIte
     }
 
     private void saveHoleToDatabase() {
-        dbHelper.insertHole(db, holeId, roundId, holeNumber, par, stroke, Util.calculateMedalScore(shotNumber, par, stroke), Util.calculateStableford(shotNumber, par, stroke), shotNumber);
+        boolean gir = checkIfGir(par, shotNumber);
+        dbHelper.insertHole(db, holeId, roundId, holeNumber, par, stroke, Util.calculateMedalScore(shotNumber, par, stroke), Util.calculateStableford(shotNumber, par, stroke), shotNumber, gir);
+        if (holeNumber == 18)
+            saveRoundToDatabase();
+    }
+
+    private boolean checkIfGir(int par, int shotNumber) {
+        return shotNumber == (par-2);
+    }
+
+    private void saveRoundToDatabase() {
+        int fairways = dbHelper.getCountFromDatabase(db, roundId, "drive", "fairway");
+        int putts = dbHelper.getCountFromDatabase(db, roundId, "putt", null);
+        int gir = dbHelper.getGirCountFromDatabase(db, roundId);
+        int medalScore = dbHelper.getMedalScore(db, roundId);
+        int stableFordScore = dbHelper.getStableFordScore(db, roundId);
+        dbHelper.insertRound(db, roundId, courseName, par, fairways, gir, putts, medalScore, stableFordScore);
     }
 }
