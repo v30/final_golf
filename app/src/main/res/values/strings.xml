@@ -10,6 +10,9 @@
     <string name="outcome">Outcome</string>
     <string name="target_distance">Distance To Hole:</string>
     <string name="end_shot">End Shot</string>
+    <string name="hole_par">Hole Par:</string>
+    <string name="hole_stroke">Hole Stroke:</string>
+    <string name="start_hole">Start Hole</string>
 
     <string-array name="shot_type">
         <item>Drive</item>

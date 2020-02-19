@@ -11,7 +11,7 @@
         android:theme="@style/AppTheme">
         <activity android:name=".ActivityShot"></activity>
         <activity android:name=".ActivityHole" />
-        <activity android:name=".AcrivityRoundDetails" />
+        <activity android:name=".ActivityRoundDetails" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

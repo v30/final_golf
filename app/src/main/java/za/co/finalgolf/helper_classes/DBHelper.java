@@ -118,9 +118,7 @@ public class DBHelper extends SQLiteOpenHelper {
         query.append("shots ");
         query.append("(");
         query.append("shot_id VARCHAR(255) PRIMARY KEY, ");
-        query.append("round_id VARCHAR(255) NOT NULL, ");
         query.append("hole_id VARCHAR(255) NOT NULL, ");
-        query.append("shot_number INT NOT NULL, ");
         query.append("shot_type VARCHAR(35) NOT NULL, ");
         query.append("target_distance INT NOT NULL, ");
         query.append("club_hit VARCHAR(2) NOT NULL, ");
@@ -170,12 +168,10 @@ public class DBHelper extends SQLiteOpenHelper {
         return db.insert(HOLES, null, values);
     }
 
-    public long insertShot(SQLiteDatabase db, String shotId, String roundId, String holeId, int shotNumber, String shotType, int targetDistance, String clubHit, String ballFlight, String outcome) {
+    public long insertShot(SQLiteDatabase db, String shotId, String holeId, String shotType, int targetDistance, String clubHit, String ballFlight, String outcome) {
         ContentValues values = new ContentValues();
         values.put(SHOT_ID, shotId);
-        values.put(ROUND_ID, roundId);
         values.put(HOLE_ID, holeId);
-        values.put(SHOT_NUMBER, shotNumber);
         values.put(SHOT_TYPE, shotType);
         values.put(TARGET_DISTANCE, targetDistance);
         values.put(CLUB_HIT, clubHit);

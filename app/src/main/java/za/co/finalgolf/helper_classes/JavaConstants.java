@@ -3,7 +3,7 @@ package za.co.finalgolf.helper_classes;
 public class JavaConstants {
     public static final int PLAYER_HANDICAP = 7;
 
-    public static final String DB_NAME = "golf_stat_tracker";
+    public static final String DB_NAME = "golf_stats.db";
     public static final int VERSION = 1;
 
 

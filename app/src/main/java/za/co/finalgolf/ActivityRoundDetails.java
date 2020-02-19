@@ -10,7 +10,7 @@ import za.co.finalgolf.helper_classes.Util;
 
 import static za.co.finalgolf.helper_classes.JavaConstants.ROUND_ID;
 
-public class AcrivityRoundDetails extends AppCompatActivity {
+public class ActivityRoundDetails extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

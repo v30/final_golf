@@ -2,6 +2,8 @@ package za.co.finalgolf;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -9,10 +11,23 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
 
+import za.co.finalgolf.helper_classes.DBHelper;
+import za.co.finalgolf.helper_classes.Util;
+
+import static za.co.finalgolf.helper_classes.JavaConstants.HOLE_ID;
+import static za.co.finalgolf.helper_classes.JavaConstants.HOLE_NUMBER;
+import static za.co.finalgolf.helper_classes.JavaConstants.HOLE_PAR;
+import static za.co.finalgolf.helper_classes.JavaConstants.HOLE_STROKE;
+import static za.co.finalgolf.helper_classes.JavaConstants.ROUND_ID;
+
 public class ActivityShot extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
+    DBHelper dbHelper;
+    SQLiteDatabase db;
     Spinner spnShotType, spnClubHit, spnBallFlight, spnOutcome;
     EditText editTargetDistance;
     boolean isPutt = false;
+    String holeId, roundId;
+    int holeNumber, par, stroke;
     String shotType;
     String clubHit;
     String ballFlight;
@@ -24,7 +39,15 @@ public class ActivityShot extends AppCompatActivity implements AdapterView.OnIte
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_shot);
+        dbHelper = new DBHelper(this);
+        db = dbHelper.getWritableDatabase();
         editTargetDistance = findViewById(R.id.edit_target_distance);
+        Intent holeIntent = getIntent();
+        holeId = holeIntent.getStringExtra(HOLE_ID);
+        roundId = holeIntent.getStringExtra(ROUND_ID);
+        holeNumber = holeIntent.getIntExtra(HOLE_NUMBER, 0);
+        par = holeIntent.getIntExtra(HOLE_PAR, 0);
+        stroke = holeIntent.getIntExtra(HOLE_STROKE, 0);
         initShotTypeSpinner();
     }
 
@@ -112,14 +135,20 @@ public class ActivityShot extends AppCompatActivity implements AdapterView.OnIte
     }
 
     private void saveShotToDatabase() {
-        System.out.println("RESULT "+targetDistance+" "+shotType+" "+clubHit+" "+ballFlight+" "+outcome);
-        System.out.println("[SHOT NUMBER]: "+shotNumber);
-        System.out.println("Saved to Database!");
-        if (outcome.equalsIgnoreCase("hole"))
+        String shotId = Util.generateGuid();
+        dbHelper.insertShot(db, shotId, holeId, shotType, targetDistance, clubHit, ballFlight, outcome);
+
+        if (outcome.equalsIgnoreCase("hole")) {
+            saveHoleToDatabase();
             finish();
+        }
 
         shotNumber++;
         editTargetDistance.setText("");
         initShotTypeSpinner();
+    }
+
+    private void saveHoleToDatabase() {
+        dbHelper.insertHole(db, holeId, roundId, holeNumber, par, stroke, Util.calculateMedalScore(shotNumber, par, stroke), Util.calculateStableford(shotNumber, par, stroke), shotNumber);
     }
 }
